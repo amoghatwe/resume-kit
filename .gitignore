@@ -1,0 +1,40 @@
+# Candidate data, evidence, generated documents, compiler and staging
+/workspace/
+/build/
+/.tools/
+/.init-*/
+
+# Python/editor caches and local environments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.cache/
+.venv/
+venv/
+env/
+.typst-cache/
+.tinymist/
+*.lock.tmp
+
+# Local secrets and logs: keep these in workspace, never in public examples
+.env
+.env.*
+*.env
+*.pem
+*.key
+*.p12
+*.pfx
+credentials.json
+secrets.json
+*.log
+*.tmp
+*.bak
+
+# Local editor and operating-system state
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+/.vscode/*.local.json

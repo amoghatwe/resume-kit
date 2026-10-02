@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "is_example": true,
+  "person": {
+    "name": "Alex Example",
+    "headline": "Research & operations analyst",
+    "contacts": [
+      { "text": "Example City" },
+      { "text": "alex@example.com", "url": "mailto:alex@example.com" },
+      { "text": "Portfolio", "url": "https://example.com/alex" }
+    ]
+  },
+  "sources": {
+    "example-degree": {
+      "kind": "example",
+      "description": "Fictional transcript: Example University, BA Social Sciences, June 2025; capstone on library access."
+    },
+    "example-placement": {
+      "kind": "example",
+      "description": "Fictional placement record: Civic Example Lab, September–December 2025. Alex maintained a service register, reviewed 24 public reports and drafted a methods note with a supervisor.",
+      "url": "https://example.com/fictional-placement"
+    },
+    "example-project": {
+      "kind": "example",
+      "description": "Fictional project notebook: compared weekly library attendance with a prior-week baseline; 18% lower error on an eight-week held-out sample. Prototype, not a deployed service.",
+      "url": "https://example.com/fictional-library-project"
+    },
+    "example-skills": {
+      "kind": "example",
+      "description": "Fictional candidate inventory: used Python, spreadsheets and descriptive statistics in coursework and placement; writes short analytical notes; English and Spanish."
+    }
+  },
+  "claims": {
+    "summary-operations": {
+      "text": "Early-career analyst combining careful data preparation, public-source research and concise written communication.",
+      "approved": true,
+      "surfaces": ["cv", "letter"],
+      "evidence": ["example-degree", "example-placement", "example-skills"]
+    },
+    "summary-research": {
+      "text": "Social-sciences graduate interested in transparent methods and the limits of small-sample analysis.",
+      "approved": true,
+      "surfaces": ["cv", "letter"],
+      "evidence": ["example-degree", "example-project"]
+    },
+    "degree-coursework": {
+      "text": "Coursework in research methods, statistics and public policy; capstone explored access to local libraries.",
+      "approved": true,
+      "surfaces": ["cv", "letter"],
+      "evidence": ["example-degree"]
+    },
+    "placement-register": {
+      "text": "Maintained a spreadsheet register of local services, reconciling duplicate records and recording source dates.",
+      "approved": true,
+      "surfaces": ["cv", "letter"],
+      "evidence": ["example-placement"]
+    },
+    "placement-review": {
+      "text": "Reviewed 24 public reports and summarized differences in coverage, definitions and collection methods.",
+      "approved": true,
+      "surfaces": ["cv", "letter"],
+      "evidence": ["example-placement"]
+    },
+    "placement-note": {
+      "text": "Drafted a methods note documenting missing values and practical limits of cross-area comparisons.",
+      "qualifier": "Prepared with supervisor review; not an independent policy recommendation.",
+      "approved": true,
+      "surfaces": ["cv", "letter"],
+      "evidence": ["example-placement"]
+    },
+    "project-analysis": {
+      "text": [
+        { "text": "Built a ", "bold": false },
+        { "text": "Python prototype", "bold": true },
+        { "text": " comparing weekly library attendance with a prior-week baseline; held-out error was 18% lower." }
+      ],
+      "qualifier": "Eight-week evaluation only; a prototype, not a deployed service.",
+      "approved": true,
+      "surfaces": ["cv", "letter"],
+      "evidence": ["example-project"]
+    },
+    "project-notebook": {
+      "text": [
+        { "text": "Documented data exclusions and baseline assumptions in a " },
+        { "text": "reproducible notebook", "url": "https://example.com/fictional-library-project" },
+        { "text": "; kept observations separate from interpretation." }
+      ],
+      "approved": true,
+      "surfaces": ["cv", "letter"],
+      "evidence": ["example-project"]
+    },
+    "skills-tools": {
+      "text": "Python · Spreadsheets · Descriptive statistics",
+      "approved": true,
+      "surfaces": ["cv", "letter"],
+      "evidence": ["example-skills"]
+    },
+    "skills-writing": {
+      "text": "Public-source research · Analytical writing",
+      "approved": true,
+      "surfaces": ["cv", "letter"],
+      "evidence": ["example-skills", "example-placement"]
+    },
+    "languages": {
+      "text": "English · Spanish",
+      "approved": true,
+      "surfaces": ["cv"],
+      "evidence": ["example-skills"]
+    }
+  },
+  "entries": {
+    "education": {
+      "title": "Example University",
+      "subtitle": "BA Social Sciences",
+      "date": "September 2022 – June 2025",
+      "location": "Example City",
+      "claims": ["degree-coursework"]
+    },
+    "placement": {
+      "title": "Civic Example Lab",
+      "subtitle": "Research & Operations Placement",
+      "date": "September – December 2025",
+      "location": "Example City",
+      "claims": ["placement-register", "placement-review", "placement-note"]
+    },
+    "library-project": {
+      "title": "Library Attendance Study",
+      "subtitle": "Independent coursework project",
+      "date": "February – May 2025",
+      "links": [{ "text": "Project notebook", "url": "https://example.com/fictional-library-project" }],
+      "claims": ["project-analysis", "project-notebook"]
+    }
+  }
+}

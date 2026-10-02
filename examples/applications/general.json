@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "id": "general",
+  "summary": ["summary-operations"],
+  "sections": [
+    { "title": "Education", "kind": "entries", "items": [{ "id": "education" }] },
+    { "title": "Experience", "kind": "entries", "items": [{ "id": "placement", "claims": ["placement-register", "placement-review"] }] },
+    { "title": "Selected Project", "kind": "entries", "items": [{ "id": "library-project", "claims": ["project-analysis"] }] },
+    { "title": "Skills & Languages", "kind": "compact", "items": ["skills-tools", "skills-writing", "languages"] }
+  ],
+  "letter": {
+    "company": "Example Community Services",
+    "role": "Operations Analyst",
+    "recipient": {
+      "name": "Hiring Team",
+      "address": ["Example Community Services", "100 Demonstration Avenue", "Example City"]
+    },
+    "date": "2 October 2026",
+    "subject": "Application for {role} — {candidate}",
+    "salutation": "Dear Hiring Team,",
+    "closing": "Kind regards,",
+    "paragraphs": [
+      {
+        "text": "I am applying for the {role} position at {company}. My social-sciences coursework and research placement gave me experience preparing data and communicating its practical limits.",
+        "claim_refs": ["degree-coursework", "summary-operations"]
+      },
+      {
+        "text": "At Civic Example Lab, I maintained a service register, reconciled duplicate records and recorded source dates. I also reviewed 24 public reports, comparing their coverage and definitions rather than treating them as directly interchangeable.",
+        "claim_refs": ["placement-register", "placement-review"]
+      },
+      {
+        "text": "My library attendance project paired a Python prototype with a simple prior-week baseline. Held-out error was 18% lower, and documenting the exclusions and assumptions was an important part of the work.",
+        "claim_refs": ["project-analysis", "project-notebook"]
+      },
+      {
+        "text": "I would bring my experience with Python, spreadsheets, public-source research and short analytical notes to the role.",
+        "claim_refs": ["skills-tools", "skills-writing"]
+      }
+    ]
+  }
+}

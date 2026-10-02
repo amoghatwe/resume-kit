@@ -1,0 +1,5 @@
+{
+  "tinymist.typstExtraArgs": ["cv.typ"],
+  "tinymist.outputPath": "$root/build/resumes/preview",
+  "tinymist.exportPdf": "onSave"
+}

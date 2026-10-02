@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "cv": {
+    "paper": "a4",
+    "margins": { "top": "18mm", "right": "20mm", "bottom": "18mm", "left": "20mm" },
+    "font": ["New Computer Modern"],
+    "sizes": { "body": "10.5pt", "name": "24pt", "heading": "12pt" },
+    "accent": "#155E63",
+    "alignment": "start",
+    "header_alignment": "center",
+    "justify": true,
+    "hyphenate": false,
+    "heading_rules": false,
+    "page_numbers": true,
+    "language": "en",
+    "direction": "auto",
+    "spacing": { "leading": "0.55em", "paragraph": "0.5em", "list": "0.4em", "entry": "0.65em", "section": "0.9em" },
+    "rule_width": "0.75pt",
+    "contact_separator": "  /  ",
+    "compact_separator": " · ",
+    "max_pages": 1
+  },
+  "letter": {
+    "paper": "a4",
+    "margins": { "top": "21mm", "right": "23mm", "bottom": "21mm", "left": "23mm" },
+    "font": ["New Computer Modern"],
+    "sizes": { "body": "11pt", "name": "24pt", "heading": "12pt" },
+    "accent": "#155E63",
+    "alignment": "start",
+    "header_alignment": "center",
+    "justify": true,
+    "hyphenate": false,
+    "heading_rules": false,
+    "page_numbers": true,
+    "language": "en",
+    "direction": "auto",
+    "spacing": { "leading": "0.6em", "paragraph": "0.85em", "list": "0.4em", "entry": "0.7em", "section": "1em" },
+    "rule_width": "0.75pt",
+    "contact_separator": "  /  ",
+    "compact_separator": " · ",
+    "max_pages": 1
+  }
+}

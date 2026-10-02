@@ -1,0 +1,36 @@
+name: Check public examples
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  documents:
+    name: Documents (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7.0.0
+        with:
+          python-version: '3.14'
+      - name: Install verified project-local Typst
+        run: python tools/resume.py setup --local
+      - name: Compiler diagnostics
+        run: python tools/resume.py doctor
+      - name: Behavioral regression suite
+        run: python -m unittest discover -s tools -p test_resume.py
+      - name: General fictional application, classic theme
+        run: python tools/resume.py build --profile examples/profile.json --application examples/applications/general.json --theme themes/classic.json --document both --preview
+      - name: Research fictional application, modern theme
+        run: python tools/resume.py build --profile examples/profile.json --application examples/applications/research.json --theme themes/modern.json --document both --preview

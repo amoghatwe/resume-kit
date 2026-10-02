@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "id": "research",
+  "summary": ["summary-research"],
+  "sections": [
+    { "title": "Research Experience", "kind": "entries", "items": [{ "id": "placement", "claims": ["placement-review", "placement-note"] }] },
+    { "title": "Methods in Practice", "kind": "entries", "items": [{ "id": "library-project" }] },
+    { "title": "Academic Background", "kind": "entries", "items": [{ "id": "education", "claims": [] }] },
+    { "title": "Academic Focus", "kind": "paragraphs", "items": ["degree-coursework"] },
+    { "title": "Research Toolkit", "kind": "bullets", "items": ["skills-tools", "skills-writing"] }
+  ],
+  "letter": {
+    "company": "Example Evidence Institute",
+    "role": "Research Assistant",
+    "recipient": { "name": "Research Hiring Team" },
+    "subject": "Application: {role}",
+    "salutation": "Dear Research Hiring Team,",
+    "closing": "Yours sincerely,",
+    "paragraphs": [
+      {
+        "text": "I am applying to {company} as a {role}. My coursework in research methods, statistics and public policy included a capstone on library access, and my project work developed my interest in transparent methods.",
+        "claim_refs": ["degree-coursework", "summary-research"]
+      },
+      {
+        "text": "During my Civic Example Lab placement, I reviewed 24 public reports and compared their coverage, definitions and collection methods. I drafted a methods note explaining missing values and the limits of cross-area comparisons.",
+        "claim_refs": ["placement-review", "placement-note"]
+      },
+      {
+        "text": "In a library attendance study, I built a Python prototype and compared it with a prior-week baseline; held-out error was 18% lower. I documented data exclusions and baseline assumptions so readers could distinguish observation from interpretation.",
+        "claim_refs": ["project-analysis", "project-notebook"]
+      },
+      {
+        "text": "I would contribute my Python and spreadsheet experience, public-source research and analytical writing to your research work.",
+        "claim_refs": ["skills-tools", "skills-writing"]
+      }
+    ]
+  }
+}
