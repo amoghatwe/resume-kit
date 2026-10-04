@@ -27,6 +27,9 @@ MAX_ARCHIVE = 128 * 1024 * 1024
 MAX_UNPACKED = 256 * 1024 * 1024
 SLUG = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*", re.ASCII)
 
+# Typst owns the page limit; the CLI only reports what the final layout already enforced.
+PAGES_EXPRESSION = 'let value = query(<resume-kit>).first().value; let theme = json(sys.inputs.at("theme")); (pages: value.pages, max_pages: theme.at(value.surface).at("max_pages", default: none))'
+
 
 class WorkflowError(Exception):
     """A useful diagnostic that contains no candidate document contents."""
@@ -360,19 +363,41 @@ def initialize_workspace():
     print(f"Initialized fictional editable workspace: {workspace}")
 
 
-def compile_document(compiler, source, output, inputs, fonts):
-    command = [str(compiler), "compile", "--root", str(ROOT)]
+def compiler_command(compiler, subcommand, inputs, fonts):
+    command = [str(compiler), subcommand, "--root", str(ROOT)]
     for name, path in inputs.items():
         command.extend(["--input", f"{name}=/{path.relative_to(ROOT).as_posix()}"])
     for font in fonts:
         command.extend(["--font-path", str(font)])
+    return command
+
+
+def compiler_diagnostic(result):
+    """Source excerpts may contain private JSON. Keep native error/help messages only."""
+    lines = [line.strip() for line in result.stderr.splitlines() if line.strip().startswith(("error:", "help:"))]
+    return "\n".join(lines[:6])[:1600] or f"Compiler exited with status {result.returncode}."
+
+
+def compile_document(compiler, source, output, inputs, fonts):
+    command = compiler_command(compiler, "compile", inputs, fonts)
     command.extend([str(source), str(output)])
     result = subprocess.run(command, capture_output=True, text=True, encoding="utf-8", errors="replace")
     if result.returncode:
-        # Source excerpts may contain private JSON. Keep native error/help messages only.
-        lines = [line.strip() for line in result.stderr.splitlines() if line.strip().startswith(("error:", "help:"))]
-        detail = "\n".join(lines[:6])[:1600] or f"Compiler exited with status {result.returncode}."
-        raise WorkflowError(f"Could not build {source.name}; previous outputs are unchanged.\n{detail}")
+        raise WorkflowError(f"Could not build {source.name}; previous outputs are unchanged.\n{compiler_diagnostic(result)}")
+
+
+def read_pages(compiler, source, inputs, fonts):
+    """Ask the native layout for final pages; the limit stays in the resolved theme."""
+    command = compiler_command(compiler, "eval", inputs, fonts)
+    command.extend([PAGES_EXPRESSION, "--in", str(source)])
+    result = subprocess.run(command, capture_output=True, text=True, encoding="utf-8", errors="replace")
+    if result.returncode:
+        raise WorkflowError(f"Could not read final page metadata for {source.name}; previous outputs are unchanged.\n{compiler_diagnostic(result)}")
+    try:
+        metadata = json.loads(result.stdout)
+        return metadata["pages"], metadata["max_pages"]
+    except (KeyError, TypeError, ValueError) as exc:
+        raise WorkflowError(f"Compiler reported no final page metadata for {source.name}; previous outputs are unchanged.") from exc
 
 
 def publish_outputs(stage, pending, stale):
@@ -426,6 +451,7 @@ def build_documents(args):
         with transaction_stage(build, ".stage-") as stage:
             pending = {}
             stale = []
+            limits = []
             for surface in surfaces:
                 folder, stem = ("resumes", f"resume-{identifier}") if surface == "cv" else ("cover-letters", f"cover-letter-{identifier}")
                 destination_dir = safe_destination(build / folder)
@@ -434,6 +460,8 @@ def build_documents(args):
                 compile_document(compiler, ROOT / f"{surface}.typ", pdf, inputs, fonts)
                 if not pdf.is_file():
                     raise WorkflowError("Compiler did not produce the requested PDF; previous outputs are unchanged.")
+                if args.report_pages:
+                    limits.append((pdf.name, *read_pages(compiler, ROOT / f"{surface}.typ", inputs, fonts)))
                 pending[safe_destination(destination_dir / pdf.name)] = pdf
                 page_pattern = re.compile(re.escape(stem) + r"-page-[0-9]+\.png", re.ASCII)
                 stale.extend(path for path in destination_dir.iterdir() if page_pattern.fullmatch(path.name))
@@ -447,6 +475,9 @@ def build_documents(args):
             publish_outputs(stage, pending, stale)
             for path in pending:
                 print(path)
+            for name, pages, limit in limits:
+                allowance = "no page limit" if limit is None else f"page limit {limit}"
+                print(f"{name}: {pages} page{'s' if pages != 1 else ''} ({allowance})")
 
 
 def parser():
@@ -461,6 +492,7 @@ def parser():
     build = commands.add_parser("build", help="Stage selected documents and publish only after every requested compile succeeds.")
     build.add_argument("--document", choices=("cv", "letter", "both"), default="cv")
     build.add_argument("--preview", action="store_true", help="Export every page as PNG beside its PDF.")
+    build.add_argument("--report-pages", action="store_true", help="After a successful build, report each document's final page count against the theme's max_pages limit; costs one extra native pass per document.")
     build.add_argument("--profile", default="workspace/profile.json")
     build.add_argument("--application", default="workspace/applications/general.json")
     build.add_argument("--theme", default="workspace/theme.json")

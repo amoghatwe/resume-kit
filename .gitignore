@@ -4,6 +4,10 @@
 /.tools/
 /.init-*/
 
+# Generated documents from a direct native compile outside build/
+*.pdf
+*.png
+
 # Python/editor caches and local environments
 __pycache__/
 *.py[cod]
@@ -16,7 +20,6 @@ venv/
 env/
 .typst-cache/
 .tinymist/
-*.lock.tmp
 
 # Local secrets and logs: keep these in workspace, never in public examples
 .env

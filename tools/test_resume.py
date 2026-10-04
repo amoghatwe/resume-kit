@@ -11,6 +11,7 @@ import io
 import importlib.util
 import json
 from pathlib import Path
+import re
 import shutil
 import stat
 import subprocess
@@ -213,6 +214,47 @@ class WorkspaceScenarios(unittest.TestCase):
         result = self.cli(*build)
         self.assertNotEqual(result.returncode, 0)
         self.assertEqual(set(directory.glob(f"resume-{application['id']}-page-*.png")), new_pages)
+
+    def test_page_reporting_matches_produced_pages_and_theme_limit(self):
+        compiler = self.require_compiler()
+        self.assert_ok(self.cli("init"))
+        application = json.loads((self.root / "workspace" / "applications" / "general.json").read_text(encoding="utf-8"))
+        profile = json.loads((self.root / "workspace" / "profile.json").read_text(encoding="utf-8"))
+        theme = json.loads((self.root / "workspace" / "theme.json").read_text(encoding="utf-8"))
+        identifier = application["id"]
+        bounded = self.cli("build", "--typst", compiler, "--report-pages")
+        self.assert_ok(bounded)
+        claim_id = next(key for key, value in profile["claims"].items() if value["approved"] and "cv" in value["surfaces"])
+        profile["claims"][claim_id]["qualifier"] = ""
+        expanded = []
+        for index in range(60):
+            selected_id = f"evidence-{index}"
+            profile["claims"][selected_id] = {
+                **profile["claims"][claim_id],
+                "text": f"Documented research question {index + 1}, its evidence and methodological limitations for the fictional study.",
+            }
+            expanded.append(selected_id)
+        self.write_json("workspace/profile.json", profile)
+        application["summary"] = []
+        application["sections"] = [{"title": "Extended evidence", "kind": "paragraphs", "items": expanded}]
+        theme["cv"]["max_pages"] = None
+        self.write_json("workspace/applications/general.json", application)
+        self.write_json("workspace/theme.json", theme)
+        unbounded = self.cli("build", "--typst", compiler, "--preview", "--report-pages")
+        self.assert_ok(unbounded)
+
+        def reported(result, stem):
+            prefix = f"{stem}.pdf:"
+            line = next((line for line in result.stdout.splitlines() if line.startswith(prefix)), None)
+            self.assertIsNotNone(line, f"no page report for {stem}: {result.stdout!r}")
+            return [int(number) for number in re.findall(r"\d+", line[len(prefix):])]
+
+        # An unlimited document must report exactly the pages the compiler actually produced.
+        produced = sorted((self.root / "build" / "resumes").glob(f"resume-{identifier}-page-*.png"))
+        self.assertGreater(len(produced), 1)
+        self.assertEqual(reported(unbounded, f"resume-{identifier}"), [len(produced)])
+        # A limited document must report the final page count and the enforced limit.
+        self.assertEqual(reported(bounded, f"resume-{identifier}"), [1, 1])
 
     def test_failed_publication_and_restore_keep_previous_documents_recoverable(self):
         compiler = self.require_compiler()

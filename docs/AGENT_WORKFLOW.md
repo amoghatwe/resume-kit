@@ -55,13 +55,15 @@ Finish when all requested compilation/export succeeds and actual generated paths
 
 Open every PDF/PNG page. Confirm candidate/application/surface, summary/section/entry order, native dates/scales, visible qualifiers and fictional status. Check clipping, overflow, font coverage, readability and mixed-direction text. A missing input or successful parser is not proof of an actual document.
 
-With the trusted exact compiler, final native metadata can be queried from the repository root:
+`build --report-pages` prints each document's final page count against the theme's page limit (`no page limit` when `max_pages` is null). It prints only after a successful publication, so a failed build reports nothing, and it costs one extra native compiler pass per document.
+
+For direct or non-CLI builds, the same metadata is queried from the repository root with the trusted exact compiler:
 
 ```sh
-typst query --root . --input profile=/workspace/profile.json --input application=/workspace/applications/target-role.json --input theme=/workspace/theme.json cv.typ '<resume-kit>' --field value
+typst eval 'query(<resume-kit>).map(it => it.value)' --root . --input profile=/workspace/profile.json --input application=/workspace/applications/target-role.json --input theme=/workspace/theme.json --in cv.typ
 ```
 
-Use `letter.typ` for the letter; query the same inputs used to build. Observe `pages`, `application_id`, `surface`, `is_example`. `max_pages` is enforced after layout, including direct native builds; visually inspect all preview pages even when a page-count check passes.
+Use `letter.typ` for the letter, and this native query when no CLI build reported pages. Query the same inputs used to build. Observe `pages`, `application_id`, `surface`, `is_example`. `max_pages` is enforced after layout, including direct native builds; visually inspect all preview pages even when a page-count check passes.
 
 Optional independent PDF inspection tools are **not build prerequisites**: `pdfinfo` checks actual PDF dimensions/page count; `pdftotext` checks extractable text; a PDF viewer or an already-installed PDF inspection library can inspect link annotations. Do not add dependency installation solely to freeze wording. If an inspection tool is unavailable, use the viewer/native metadata where possible and state the remaining verification limit. Do not describe an unobserved link-annotation check as passed.
 
