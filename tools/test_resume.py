@@ -85,6 +85,16 @@ class ArchiveSafety(unittest.TestCase):
                         self.assertFalse((root / "outside").exists())
 
 
+class ShippedThemes(unittest.TestCase):
+    def test_shipped_presets_keep_list_spacing_equal_to_leading(self):
+        for name in ("classic", "modern"):
+            theme = json.loads((resume.ROOT / "themes" / f"{name}.json").read_text(encoding="utf-8"))
+            for surface in ("cv", "letter"):
+                with self.subTest(theme=name, surface=surface):
+                    spacing = theme[surface]["spacing"]
+                    self.assertEqual(spacing["leading"], spacing["list"])
+
+
 class WorkspaceScenarios(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory()

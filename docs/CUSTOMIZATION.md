@@ -189,7 +189,7 @@ A theme is `{ "schema_version": 1, "cv": { ... }, "letter": { ... } }`. **All se
 | `page_numbers` | Boolean, footer page numbers. |
 | `language` | Language string passed to native text layout, e.g. `"en"` or `"ar"`. |
 | `direction` | `"auto"`, `"ltr"` or `"rtl"`. |
-| `spacing` | Object with `leading`, `paragraph`, `list`, `entry`, `section` safe length strings. |
+| `spacing` | Object with `leading`, `paragraph`, `list`, `entry`, `section` safe length strings. `leading` (wrapped-line pitch inside one paragraph or bullet) and `list` (pitch between separate list items) must stay **equal**: unequal knobs give the body two different line pitches, so wrapped lines inside one bullet sit looser than adjacent single-line bullets. Retune both together. |
 | `rule_width` | Safe length string controlling heading-rule stroke thickness. |
 | `contact_separator` | Literal string between ordered contacts. |
 | `compact_separator` | Literal string between compact claims. |
@@ -212,7 +212,7 @@ A complete surface example (use it under `cv` and/or `letter`):
   "page_numbers": false,
   "language": "en",
   "direction": "auto",
-  "spacing": {"leading": "0.55em", "paragraph": "0.5em", "list": "0.35em", "entry": "0.7em", "section": "1em"},
+  "spacing": {"leading": "0.6em", "paragraph": "0.5em", "list": "0.6em", "entry": "0.7em", "section": "1em"},
   "rule_width": "0.5pt",
   "contact_separator": " | ",
   "compact_separator": " · ",
