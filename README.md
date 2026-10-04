@@ -214,6 +214,8 @@ These are separate arguments, not combined strings. Use Tinymist's Preview comma
 
 The original project source, documentation and fictional examples are [MIT licensed](LICENSE). Cloning does not publish or transfer ownership of your private facts, evidence or generated documents. You decide whether/how to distribute your own application documents, subject to any third-party rights. Downloaded Typst has its own bundled license/notices.
 
+The starter layout was adapted from [stuxf's basic-typst-resume-template](https://github.com/stuxf/basic-typst-resume-template), and documents are compiled with the open-source [Typst](https://github.com/typst/typst) compiler.
+
 The project is prepared for **local use by default**. It does not create a GitHub repository, configure a remote or push. For a source-only public repository, first review every named public file for private data/secrets. The exact initial public file set is:
 
 ```sh
