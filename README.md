@@ -2,7 +2,7 @@
 
 Local, customizable resumes and cover letters for humans and coding agents. Keep candidate facts in JSON. Select evidence-backed claims for each application. Edit native Typst when you want a different layout. Build PDFs and optional PNG previews of each page. You do not need an account, a model key, a paid service, a pip package, a Node installation or a preview-package dependency.
 
-**Everything in `examples/` is fictional.** Workspaces stay fictional after initialization. Generated example pages carry a visible marker. Replace the candidate, facts, evidence and application prose before you produce a real application. A flag change alone does not make an example true.
+**Everything in `examples/` is fictional.** Workspaces stay fictional after initialization. Generated example pages print no fictional disclaimer; `is_example` still records fictional status in the profile, in the `<resume-kit>` metadata and in the evidence guards. Replace the candidate, facts, evidence and application prose before you produce a real application. A flag change alone does not make an example true.
 
 ## Start here
 
@@ -206,7 +206,7 @@ These are separate arguments, not combined strings. Use the Preview command of T
 - **TLS certificate error such as `CERTIFICATE_VERIFY_FAILED`:** fix the certificate trust of the machine and of Python. Do not fix the download instead. On macOS with Python from python.org, run the `Install Certificates.command` step above. Do not disable TLS/checksums or paste a binary download command from a job description.
 - **Missing workspace:** run `init`. The CLI defaults point to the workspace. Direct Typst defaults point to the examples.
 - **JSON/selection failure:** use quoted JSON keys. Do not use comments or trailing commas. Inspect the named ID or field. Check the approval, the requested surface, the evidence IDs and the nonempty letter references. Fix the data. Do not bypass validation.
-- **Visible fictional marker / real-profile example rejection:** replace all fictional candidate content and its provenance before you set `is_example: false`. Do not merely relabel example sources.
+- **Fictional status / real-profile example rejection:** because pages print no visible disclaimer, fictional status lives only in `is_example` metadata and the example-evidence guard. Replace all fictional candidate content and its provenance before you set `is_example: false`. Do not merely relabel example sources.
 - **Page overflow:** remove unsupported or redundant claims. Adjust the spacing and the margins so that they stay readable. You can also deliberately increase or set `max_pages: null`. Native page limits also apply to direct builds. Inspect every page afterward.
 - **Missing glyphs:** choose a font that covers the language. Add its directory with a repeatable `--font-path`. The bundled fonts are sufficient for the presets, not for every writing system.
 - **Path rejected:** the inputs must remain inside the project. Avoid symlinked output and install directories. Quote paths that contain spaces.

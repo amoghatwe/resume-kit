@@ -168,6 +168,8 @@
     location: string-value(entry.at("location", default: ""), "entry " + id + ".location"),
     links: contacts(entry.at("links", default: ()), "entry " + id + ".links"),
     claims: resolve-claims(ids, profile, "cv", "entry " + id + " selected claims"),
+    layout: choice(selection.at("layout", default: "standard"),
+      ("standard", "education", "role", "inline"), "entry selection.layout"),
   )
 }
 #let resolve-sections(raw, profile) = {

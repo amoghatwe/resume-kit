@@ -72,7 +72,7 @@ Completion means:
 1. Every requested PDF and requested every-page preview exists under the expected application-ID paths.
 2. Every selected assertion, metadata field and letter paragraph was checked against supplied evidence; no invented impact/credentials/facts or lost qualifiers.
 3. Every page was visually inspected; final counts and page policy agree; text and link targets were inspected with available tools.
-4. Fictional pages visibly identify themselves; real applications contain no surviving fictional candidate content/evidence.
+4. Fictional status is recorded accurately — `is_example` stays true in the metadata and example evidence remains rejected for real profiles — even though no page prints a visible disclaimer; real applications contain no surviving fictional candidate content/evidence.
 5. Private inputs remain private; no remote creation, upload or publication occurred without explicit user instruction.
 6. The final response reports generated paths, observed checks and exact unresolved facts/inspection limits. Local success is not a claim of remote GitHub Actions success.
 
@@ -88,7 +88,7 @@ Ignoring files is not a security guarantee. Review named public files/staged con
 
 The following is a **fully fictional exercise** showing how to supply evidence and a JD. Replace it with your actual evidence/constraints for a real application; never submit this candidate as yourself.
 
-> Use this repository to create a fictional analyst application locally. Read AGENTS.md and its relevant branches. Run setup/doctor/init as needed, preserve prior workspace edits, and use only the supplied evidence below. Keep `is_example: true` and source `kind: "example"`; retain the visible fictional marker. Do not upload, configure a remote or access credentials.
+> Use this repository to create a fictional analyst application locally. Read AGENTS.md and its relevant branches. Run setup/doctor/init as needed, preserve prior workspace edits, and use only the supplied evidence below. Keep `is_example: true` and source `kind: "example"`; no visible fictional disclaimer is printed on the page. Do not upload, configure a remote or access credentials.
 >
 > Candidate: Alex Example; contact alex@example.com; portfolio https://example.com/alex; location Example City. Approved fictional evidence `exercise-brief`: BSc Economics at Example University, Sep 2022–Jun 2025, GPA 7.5/8.0 native scale. In a Jan–May 2025 class project, Alex cleaned a public monthly dataset in Python and compared three published forecasting baselines. Alex wrote a reproducible methods/results report; this was coursework, not production deployment, and there is no supported accuracy improvement. The project was a two-person team; Alex's contribution was data cleaning and baseline comparison. Approved methods: Python and spreadsheet analysis. All of these supplied assertions are permitted on CV and letter. No other candidate facts are approved.
 >

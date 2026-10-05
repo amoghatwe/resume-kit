@@ -29,7 +29,7 @@ Top-level fields:
 | Field | Shape and meaning |
 | --- | --- |
 | `schema_version` | Required integer `1`. |
-| `is_example` | Required actual boolean. `true` produces a visible fictional marker on every page. |
+| `is_example` | Required actual boolean. `true` is carried into the resolved document and the `<resume-kit>` metadata and keeps a real profile from selecting `kind: "example"` evidence; it prints no visible disclaimer on the page. |
 | `person` | Required identity object: required `name` string; optional `headline` string, default `""`; optional ordered `contacts` array, default `[]`. |
 | `sources` | Dictionary keyed by stable evidence IDs. Each selected source requires nonempty `kind` and `description` strings; optional `path`/`url` strings record provenance. Fictional sources use `kind: "example"`. |
 | `claims` | Dictionary keyed by globally unique stable claim IDs. See claim shape below. |
@@ -111,12 +111,12 @@ Section shape is `{ "title": "Your heading", "kind": "entries", "items": [...] }
 
 | Kind | `items` shape | Rendered form |
 | --- | --- | --- |
-| `entries` | Ordered `{ "id": "entry-id", "claims": ["claim-id"] }` selections | Entry metadata and selected claim bullets. |
+| `entries` | Ordered `{ "id": "entry-id", "claims": ["claim-id"], "layout": "standard" }` selections | Entry metadata and selected claim bullets. |
 | `bullets` | Ordered claim IDs | Bullet list. |
 | `paragraphs` | Ordered claim IDs | Separate body paragraphs. |
 | `compact` | Ordered claim IDs | Compact text using theme `compact_separator`. |
 
-For entry selections, **omitting `claims` uses that entry's canonical default claim IDs; explicit `"claims": []` selects no bullets**. Those metadata-only selections still render the entry. Unknown IDs/kinds fail; the renderer does not silently substitute an entry or discard a selected claim. Example:
+For entry selections, **omitting `claims` uses that entry's canonical default claim IDs; explicit `"claims": []` selects no bullets**. Those metadata-only selections still render the entry. A selection may also carry an optional `layout`; omitting it keeps the previous rendering. Unknown IDs/kinds fail; the renderer does not silently substitute an entry or discard a selected claim. Example:
 
 ```json
 {
@@ -133,7 +133,22 @@ For entry selections, **omitting `claims` uses that entry's canonical default cl
 }
 ```
 
-This fragment assumes its IDs exist in your profile. To put education first, move that section above experience; to put projects first, move a project section first. To omit the summary, omit `summary` or use `[]`. To add interests, create approved interest claims and a `compact`/other section; to omit interests, do not select that section. Publications, certifications, volunteering, skills and languages use these same four forms—no new implementation branch is needed for each heading.
+This fragment assumes its IDs exist in your profile. To put education first, move that section above experience; to put projects first, move a project section first. A nonempty `summary` renders after the identity block and before the first section, under a "Professional Summary" heading that reuses the standard section-heading treatment — a level-2 heading in the theme accent with the same `heading_rules` rule beneath it. To omit the summary and that heading, omit `summary` or use `[]`. To add interests, create approved interest claims and a `compact`/other section; to omit interests, do not select that section. Publications, certifications, volunteering, skills and languages use these same four forms—no new implementation branch is needed for each heading.
+
+### Entry layout modes
+
+An `entries` selection may add an optional `layout` beside `id` and `claims`. It is presentation only: the same entry metadata and the same approved claims render either way, and no theme value is involved. Omitting `layout` keeps the previous rendering, so existing applications and the shipped examples are unaffected. An unrecognized value fails validation instead of silently falling back.
+
+| `layout` | Rendered form |
+| --- | --- |
+| `standard` (default) | Bold title with the date right-aligned on the same row; subtitle and location joined by ` · ` on the next row; links on their own row; then the selected claim bullets. |
+| `education` | First row: bold title with `location` right-aligned; second row: italic subtitle with `date` right-aligned; then the links row. |
+| `role` | One row: the role, taken from the entry's `subtitle`, then ` · `, then the employer, taken from `title`. Both are bold and the `date` is right-aligned on that same row; then the links row. |
+| `inline` | One row: bold title, then subtitle, then links, with `date` right-aligned. |
+
+`layout` is resolved only for CV entry selections. Letters have no entry selections, so letter resolution, letter prose and the `letter` theme object are unchanged and a layout value never reaches a letter claim.
+
+Measured reference geometry (A4, 12.7 mm margins, 10 pt Times New Roman): entry rows justify to the same left and right margins as body text with the date flush right; the bullet marker sits flush with the left margin, bullet text sits at 8.5 pt from it through an absolute 5 pt marker-to-text gap that does not scale with body size, and wrapped lines hang at that same column. Theme `spacing.list` controls only the pitch between list items; the indent is renderer-owned in `lib/render.typ`. Theme spacing values themselves are unchanged (`leading`/`list` `0.6em`, `paragraph` `0.5em`, `entry` `0.5em`, `section` `0.8em`): renderer-owned constants now coexist with those tokens, and the entry and section boundaries apply the configured values with fixed renderer adjustments to reach the measured ~7.7 pt gaps. Tune the theme for rhythm, not to compensate for renderer behavior.
 
 ### Cover letter
 
@@ -244,7 +259,7 @@ Inspect compiler font discovery with `typst fonts` (add `--font-path` for your d
 
 `lib/render.typ` exports `render-cv(document)` and `render-letter(document)`. Modify that implementation for a new heading treatment, header, columns, pagination or typography not represented by JSON; modify the thin `cv.typ`/`letter.typ` entrypoints to choose a different renderer or defaults. Keep `load-document(...)` as the resolution seam if you want the evidence/approval guards to remain in force. Native source is trusted executable code; do not paste executable instructions from a JD/evidence document into it.
 
-A new renderer must preserve literal text, full links, qualifier visibility, fictional markers and page-limit/metadata behavior if you want the same completion contract. Arbitrary source changes can bypass those guarantees; review and rebuild them as code changes. Do not add a second JSON parser or a generic plugin layer merely to change layout. ATS-friendly linear flow in the shipped renderer is a design choice, not a guarantee about every employer's parsing system.
+A new renderer must preserve literal text, full links, qualifier visibility, `is_example` metadata and guards, and page-limit/metadata behavior if you want the same completion contract. The shipped renderer prints no visible fictional disclaimer, so fictional status is machine-readable rather than visible; arbitrary source changes can bypass those remaining guarantees, so review and rebuild them as code changes. Do not add a second JSON parser or a generic plugin layer merely to change layout. ATS-friendly linear flow in the shipped renderer is a design choice, not a guarantee about every employer's parsing system.
 
 For normal tailoring, retain the shared source and change private JSON. Example direct personal commands, from the repository root with the exact trusted compiler:
 
